@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: ba-nginx
+  name: ba-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ba-nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ba-nginx
+    spec:
+      containers:
+      - image: neilschark/ba-website:ba-nginx
+        imagePullPolicy: Always
+        name: ba-nginx
+        ports:
+        - containerPort: 1337
+        resources: {}
+        volumeMounts:
+        - mountPath: /home/app/web/staticfiles
+          name: static-volume
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: static-volume
+        persistentVolumeClaim:
+          claimName: static-volume
+status: {}

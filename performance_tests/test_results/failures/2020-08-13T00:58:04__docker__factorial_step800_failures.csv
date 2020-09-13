@@ -1,0 +1,5 @@
+Method,Name,Error,Occurrences
+GET,/api/factorial/10000,502 Server Error: Bad Gateway for url: http://192.168.69.211:1337/api/factorial/10000,1475
+GET,/api/factorial/10000,504 Server Error: Gateway Time-out for url: http://192.168.69.211:1337/api/factorial/10000,77
+GET,/api/factorial/10000,"('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",772
+GET,/api/factorial/10000,"('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",251

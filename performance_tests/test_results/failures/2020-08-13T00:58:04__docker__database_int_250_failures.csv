@@ -1,0 +1,9 @@
+Method,Name,Error,Occurrences
+DELETE,/api/delete/integer/[id],502 Server Error: Bad Gateway for url: /api/delete/integer/[id],43
+GET,/api/get/integers/100,502 Server Error: Bad Gateway for url: http://192.168.69.211:1337/api/get/integers/100,22
+POST,/api/create/random-integer,504 Server Error: Gateway Time-out for url: http://192.168.69.211:1337/api/create/random-integer,5
+POST,[INIT]/api/create/random-integers[INIT],502 Server Error: Bad Gateway for url: [INIT]/api/create/random-integers[INIT],1
+GET,/api/get/integers/100,504 Server Error: Gateway Time-out for url: http://192.168.69.211:1337/api/get/integers/100,1
+GET,/api/get/integer/[id],504 Server Error: Gateway Time-out for url: /api/get/integer/[id],1
+GET,/api/get/integer/[id],502 Server Error: Bad Gateway for url: /api/get/integer/[id],290
+POST,/api/create/random-integer,502 Server Error: Bad Gateway for url: http://192.168.69.211:1337/api/create/random-integer,94

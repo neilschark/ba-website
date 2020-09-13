@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: ba-backend
+  name: ba-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ba-backend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ba-backend
+    spec:
+      containers:
+      - args:
+        - ./run_docker.sh
+        env:
+        - name: DBDATABASE
+          value: ba-db
+        - name: DBHOST
+          value: ba-postgres
+        - name: DBPASSWORD
+          value: "1234"
+        - name: DBPORT
+          value: "5432"
+        - name: DBUSER
+          value: ba-user
+        - name: SECRET
+          value: SECRETKEY
+        image: neilschark/ba-website:ba-backend
+        imagePullPolicy: Always
+        name: ba-backend
+        ports:
+        - containerPort: 1337
+        resources: {}
+        workingDir: /backend
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

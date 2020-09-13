@@ -1,0 +1,66 @@
+import matplotlib.pyplot as plt
+import sys
+from ExtractDataCsv import extract_data_csv
+from TableDataGenerator import write_table_data
+import copy
+
+timestamp = sys.argv[1]
+data_type = sys.argv[2]
+test_type = "database_string_25"
+deployments = ["classic", "docker", "orchestration"]
+save_filename = f"{timestamp}__{test_type}_rps"
+average_data = {}
+
+# Get data from csv
+data = extract_data_csv(deployments, timestamp, test_type, x_position=0, y_position=4, calc_average=False)
+data_table_data = extract_data_csv(deployments, timestamp, test_type, x_position=1, y_position=4, calc_average=False)
+
+cut_front = 11
+cut_back = 4
+
+write_table_data(data_table_data, save_filename, cut_front, cut_back)
+
+# delete entries that are too early:
+for deployment, deployment_data in data.items():
+    for i in range(0, cut_front):
+        del(deployment_data["x"][0])
+        del(deployment_data["y"][0])
+
+# delete entries that are too late:
+for deployment, deployment_data in data.items():
+    for i in range(0, cut_back):
+        del(deployment_data["x"][-1])
+        del(deployment_data["y"][-1])
+
+#calculate average
+data_copy = copy.deepcopy(data)
+for deployment, deployment_data in data_copy.items():
+    for _ in range(0, 4):
+        del deployment_data["y"][0]
+        del deployment_data["y"][-1]
+    average_data[deployment] = round(sum(deployment_data["y"])/len(deployment_data["y"]), 2)
+
+# get first timestamp
+start_timestamps = {}
+for deployment in deployments:
+    start_timestamps[deployment] = data[deployment]["x"][0]
+# Calc timestamps starting from 0
+for deployment, deployment_data in data.items():
+    for iterator, timestamp in enumerate(deployment_data["x"]):
+        deployment_data["x"][iterator] = timestamp - start_timestamps[deployment]
+
+plt.plot(data["classic"]["x"], data["classic"]["y"], color="tab:blue", marker=".")
+plt.plot(data["docker"]["x"], data["docker"]["y"], color="tab:green", marker=".")
+plt.plot(data["orchestration"]["x"], data["orchestration"]["y"], color="tab:orange", marker=".")
+
+plt.title("Datenbank (String): Anfragen pro Sekunde 25 Nutzer")
+plt.xlabel("Zeit in Sekunden")
+plt.ylabel("Anfragen pro Sekunde")
+plt.legend([f'Klassisch (Ø: {average_data["classic"]})', f'Docker (Ø: {average_data["docker"]})', f'K3s (Ø: {average_data["orchestration"]})'], loc=0)
+#plt.legend(['Klassisch', 'Docker', 'K3s'], loc=0)
+
+# Limit graph scale:
+#plt.xlim(0)
+plt.ylim(10, 12)
+
+plt.savefig(f"../graphs/{save_filename}.{data_type}")

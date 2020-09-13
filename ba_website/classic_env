@@ -1,0 +1,6 @@
+export DBDATABASE="ba-db"
+export DBHOST="127.0.0.1"
+export DBPASSWORD="1234"
+export DBPORT="5432"
+export DBUSER="vagrant"
+export SECRET="SECRETKEY"

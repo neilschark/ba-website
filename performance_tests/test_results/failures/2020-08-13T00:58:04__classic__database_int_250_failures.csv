@@ -1,0 +1,6 @@
+Method,Name,Error,Occurrences
+DELETE,/api/delete/integer/[id],404 Client Error: Not Found for url: /api/delete/integer/[id],45
+GET,/api/get/integer/[id],404 Client Error: Not Found for url: /api/get/integer/[id],225
+POST,/api/create/random-integer,404 Client Error: Not Found for url: http://192.168.69.210:1337/api/create/random-integer,53
+POST,[INIT]/api/create/random-integers[INIT],404 Client Error: Not Found for url: [INIT]/api/create/random-integers[INIT],5
+GET,/api/get/integers/100,404 Client Error: Not Found for url: http://192.168.69.210:1337/api/get/integers/100,22

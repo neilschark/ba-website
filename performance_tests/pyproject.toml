@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "performance-tests"
+version = "1"
+description = ""
+authors = [
+    "Neil Schark <neil@schark.eu>"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+locust = "^1.0.3"
+matplotlib = "^3.3.0"
+
+[tool.poetry.dev-dependencies]
+rope = "^0.17.0"
+black = {version = "^19.10b0", allow-prereleases = true}
+pylint = "^2.5.3"

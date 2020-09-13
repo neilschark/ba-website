@@ -1,0 +1,71 @@
+version: '3'
+services:
+  ba-backend:
+    build: 
+      context: .
+      dockerfile: ba_website/Dockerfile
+    container_name: ba-backend
+    working_dir: /backend
+    environment:
+    - DBDATABASE=ba-db
+    - DBHOST=ba-postgres
+    - DBPASSWORD=1234
+    - DBPORT=5432
+    - DBUSER=ba-user
+    - SECRET=SECRETKEY
+    command: ./run_docker.sh
+    expose:
+      - 1337
+    depends_on:
+      - ba-postgres
+
+  ba-nginx:
+    build:
+      context: .
+      dockerfile: nginx/docker/Dockerfile
+    container_name: ba-nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 0.0.0.0:1337:1337
+    depends_on:
+      - ba-backend
+
+  ba-postgres:
+    image: postgres:11
+    container_name: ba-postgres
+    environment:
+      - POSTGRES_USER=ba-user
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=ba-db
+    volumes:
+      - ba-postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+
+  #ba-frontend:
+  #  build: 
+  #    context: .
+  #    dockerfile: ba_frontend/Dockerfile
+  #  container_name: ba-frontend
+  #  environment:
+  #  - VUE_APP_BACKEND=ba-nginx:1337/api
+  #  command: ./run_debug.sh
+  #  ports:
+  #    - 0.0.0.0:8080:8080
+  
+  adminer:
+    image: adminer:latest
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: postgres
+      ADMINER_DEFAULT_DB_HOST: ba-postgres
+      ADMINER_DEFAULT_DB_NAME: ba-db
+      ADMINER_DESIGN: nette
+    ports:
+      - 8000:8080
+    depends_on:
+      - ba-postgres
+
+volumes:
+  ba-postgres-volume:
+  static_volume:
